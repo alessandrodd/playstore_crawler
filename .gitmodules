@@ -1,0 +1,3 @@
+[submodule "googleplay_api"]
+	path = googleplay_api
+	url = https://github.com/alessandrodd/googleplay_api.git

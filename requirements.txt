@@ -1,0 +1,5 @@
+retry_decorator==1.1.0
+requests==2.18.1
+pymongo==3.5.1
+clint==0.5.1
+protobuf==3.4.0
