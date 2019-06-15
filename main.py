@@ -27,16 +27,19 @@ from urllib.parse import urlparse, parse_qs
 import requests
 from google.protobuf import json_format
 
-from config import conf
+LOG_CONFIG_PATH = "log_config.json"
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-dictConfig(conf.logging)
+import config
+
+with open(os.path.join(__location__, LOG_CONFIG_PATH), "r", encoding="utf-8") as fd:
+    log_config = json.load(fd)
+    logging.config.dictConfig(log_config["logging"])
+
 from my_model.crawl_task import CrawlTask
 from my_tools.file_tools import get_folder_size, sanitize_filename
 
 import db_interface
-
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-# sys.path.insert(1, os.path.join(__location__, "googleplay_api"))
 
 from googleplay_api.googleplay_api.googleplay import GooglePlayAPI, DownloadError, RequestError
 import googleplay_api.googleplay_api.config as play_conf
@@ -121,9 +124,9 @@ def initialize_database():
     for cat_id, tab in get_all_subcategories():
         logging.info("Scraping {0} => {1}".format(cat_id, tab))
         list_result = play_store.list(cat_id, tab, maxResults=100)
-        if conf.slow_crawl:
-            details = play_store.getPages(list_result, maxPages=None, details=True, includeChildDocs=conf.more_details,
-                                          includeDetails=conf.more_details)
+        if config.slow_crawl:
+            details = play_store.getPages(list_result, maxPages=None, details=True, includeChildDocs=config.more_details,
+                                          includeDetails=config.more_details)
             dump_data(details)
         else:
             list_results = play_store.getPages(list_result, maxPages=None)
@@ -136,8 +139,8 @@ def initialize_database():
 
 def crawl_similar(package):
     list_result = play_store.listSimilar(package, maxResults=100)
-    details = play_store.getPages(list_result, maxPages=None, details=True, includeChildDocs=conf.more_details,
-                                  includeDetails=conf.more_details)
+    details = play_store.getPages(list_result, maxPages=None, details=True, includeChildDocs=config.more_details,
+                                  includeDetails=config.more_details)
     similar_packages = []
     for entry in details.entry:
         similar_packages.append(entry.doc.docid)
@@ -147,8 +150,8 @@ def crawl_similar(package):
 
 def crawl_creator(creator):
     search_result = play_store.search(creator)
-    details = play_store.getPages(search_result, maxPages=None, details=True, includeChildDocs=conf.more_details,
-                                  includeDetails=conf.more_details)
+    details = play_store.getPages(search_result, maxPages=None, details=True, includeChildDocs=config.more_details,
+                                  includeDetails=config.more_details)
     dump_data(details)
 
 
@@ -363,10 +366,10 @@ def main():
     if results.boolean_apkspool:
         out_dir = results.out_dir
         if not out_dir:
-            out_dir = conf.apks_pool_folder
+            out_dir = config.apks_pool_folder
         dir_size = int(results.max_dir_size)
         if not dir_size:
-            dir_size = conf.apks_pool_size_mb
+            dir_size = config.apks_pool_size_mb
         create_apks_pool(os.path.abspath(out_dir), dir_size)
         return
 

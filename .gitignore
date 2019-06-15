@@ -1,6 +1,7 @@
 # Custom
 .idea/
 googleplay_api/config.ini
+config.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

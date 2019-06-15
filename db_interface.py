@@ -5,14 +5,14 @@ import pymongo
 from pymongo.errors import BulkWriteError
 from retry_decorator import retry
 
-from config import conf, dbconf
+import config
 
 PLAYSTORE_COLLECTION_NAME = "playstore"
 CRAWLQUEUE_COLLECTION_NAME = "crawler_queue"
 
 # configure remote dump location
-client = pymongo.MongoClient(dbconf.address, int(dbconf.port), username=dbconf.user, password=dbconf.password)
-db = client[dbconf.name]
+client = pymongo.MongoClient(config.mongodb["address"], config.mongodb["port"], username=config.mongodb["user"], password=config.mongodb["password"])
+db = client[config.mongodb["name"]]
 playstore_col = db[PLAYSTORE_COLLECTION_NAME]
 # for a given device and a given version code, an app should be unique
 playstore_col.create_index(
@@ -72,7 +72,7 @@ def get_crawl_task():
     if not document_before:
         # if there isn't any task to do, check if there is an old task that has expired
         # (i.e. was started but never finished)
-        task_max_duration = int(conf.max_task_duration_seconds)
+        task_max_duration = int(config.max_task_duration_seconds)
         task_deadline = time.time() - task_max_duration
         document_before = crawlqueue_col.find_one_and_update({"start_time": {"$lt": task_deadline}, "end_time": None},
                                                              {"$set": {"start_time": time.time()}})
@@ -115,7 +115,7 @@ def get_app_undownloaded(free_only=True):
     if not document_before:
         # if there isn't any analysis to do, check if there is an old analysis that has expired
         # (i.e. was started but never finished)
-        analysis_max_duration = int(conf.max_download_duration_seconds)
+        analysis_max_duration = int(config.max_download_duration_seconds)
         analysis_deadline = time.time() - analysis_max_duration
         fil = {"download_start_time": {"$lt": analysis_deadline}, "download_end_time": None}
         if free_only:

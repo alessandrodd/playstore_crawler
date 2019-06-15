@@ -1,10 +1,4 @@
 {
-  "slow_crawl": false,
-  "more_details" : false,
-  "apks_pool_folder": "apks",
-  "apks_pool_size_mb": 200,
-  "max_task_duration_seconds": 600,
-  "max_download_duration_seconds": 3600,
   "logging": {
     "version": 1,
     "formatters": {

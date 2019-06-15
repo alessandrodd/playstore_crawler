@@ -25,12 +25,12 @@ $ pip3 install -r requirements.txt
 $ python3 main.py
 ```
 
-A running MongoDB instance is needed to store the crawler results and task queue. Configure the dbconfig.json file with the required information.
+A running MongoDB instance is needed to store the crawler results and task queue. Configure the mongodb object in the config.yml file with the required information.
 You can use the following command in mongoshell to add an authorized user:
 
     db.createUser({user: "playstore_crawler", pwd: "alessandrodd", roles: [ { role: "dbOwner", db: "mytestdb" } ]})
 
-You also need to rename the [config.ini.example](googleplay_api/googleplay_api/config.ini.example) file to config.ini and fill it with a proper Google Service Framework ID and either gmail credentials (google_login and google_password) or a subAuth token.
+You also need to rename the [config.ini.example](googleplay_api/googleplay_api/config.example.ini) file to config.ini and fill it with a proper Google Service Framework ID and either gmail credentials (google_login and google_password) or a subAuth token.
 Alternatively, you can use the crawler with a [token dispenser](https://github.com/yeriomin/token-dispenser) specified through the token-dispenser argument.
 
 ## Usage
