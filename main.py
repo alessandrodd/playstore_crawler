@@ -367,7 +367,7 @@ def main():
         out_dir = results.out_dir
         if not out_dir:
             out_dir = config.apks_pool_folder
-        dir_size = int(results.max_dir_size)
+        dir_size = results.max_dir_size
         if not dir_size:
             dir_size = config.apks_pool_size_mb
         create_apks_pool(os.path.abspath(out_dir), dir_size)
