@@ -30,7 +30,7 @@ You can use the following command in mongoshell to add an authorized user:
 
     db.createUser({user: "playstore_crawler", pwd: "alessandrodd", roles: [ { role: "dbOwner", db: "mytestdb" } ]})
 
-You also need to rename the [config.ini.example](googleplay_api/googleplay_api/config.example.ini) file to config.ini and fill it with a proper Google Service Framework ID and either gmail credentials (google_login and google_password) or a subAuth token.
+You also need to rename the [config.example.yml](googleplay_api/googleplay_api/config.example.yml) file to config.yml and fill it with a proper Google Service Framework ID and either gmail credentials (google_login and google_password) or a subAuth token.
 Alternatively, you can use the crawler with a [token dispenser](https://github.com/yeriomin/token-dispenser) specified through the token-dispenser argument.
 
 ## Usage
